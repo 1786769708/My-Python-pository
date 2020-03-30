@@ -1,0 +1,67 @@
+print("加载中...")
+import xlwings as xw
+import time
+from openpyxl import load_workbook
+from openpyxl.styles import Border, colors, Side,Alignment, Font
+
+def main():
+try:
+
+  line_c = str(input("请输入对应的列:\n"))
+  zongchanneng = int(input("请输入今日总产能:\n"))
+  S = str(input("请确定已关闭'修护解码数据.xlsx' Y/N :\n"))
+except BaseException:
+  print("输入错误")
+
+  exit()
+if S == "Y" or S == "y":
+  print("修改样式中...")
+try:
+  wb = load_workbook("修护解码数据.xlsx")
+except BaseException:
+  print("请确认'修护解码数据.xlsx'表和程序同级")
+sheet_names = wb.sheetnames # 返回一个列表
+ws2 = wb[sheet_names[0]] # index为0为第一张表
+i = 20 #设置表格开始单元格
+d=19 #
+line_2 = line_c + str(d)
+border_set = Border(left=Side(style='thin', color=colors.BLACK),
+right=Side(style='thin', color=colors.BLACK),
+top=Side(style='thin', color=colors.BLACK),
+bottom=Side(style='thin', color=colors.BLACK))#设置单元格样式
+font = Font(u'微软雅黑',
+size=11, )
+font_cell20 = Font(u'微软雅黑',
+size=11,
+bold=True,
+color=colors.WHITE)
+line_d=('B19:CC19')
+print(line_d)
+
+while i <= 65:
+  line_1 = line_c + str(i)
+  align = Alignment(horizontal='center', vertical='center', wrap_text=True)
+  ws2[line_1].alignment = align
+  ws2[line_1].font = font
+
+if i == 20:
+  ws2[line_1].font = font_cell20#填入单元格样式
+if i == 31:
+  pass
+
+ws2[line_1].border = border_set
+i += 1
+print("样式已修改OK")
+wb.save("修护解码数据.xlsx")
+xw.App(visible=False, add_book=False)
+print("正在筛选数据请稍等3秒左右...")
+try:
+  wb = xw.Book("MES.xlsx")
+except BaseException:
+  print('''请确认"MES.xlsx"放在脚本同等级文件内''')
+  wb.close()
+  exit()
+
+sht = wb.sheets["Query"]
+
+sht.ra
